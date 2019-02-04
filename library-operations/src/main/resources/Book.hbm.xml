@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>  
+
+ <hibernate-mapping>  
+  <class name="library_operations.Book" table="books">  
+    <id name="id" column="id" type="int">  
+     <generator class="assigned"></generator>  
+    </id>  
+            
+    <property name="title" column="title" type="text"></property>
+    <property name="author" column="author" type="text"></property>
+    <property name="copies" column="copies" type="int"></property>  
+            
+  </class>  
+            
+ </hibernate-mapping>  

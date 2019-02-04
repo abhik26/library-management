@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Library Operation GUI</title>
+<script src="angular.js"></script>
+<script src="library.js"></script>
+
+<style>
+* {
+	margin: 0;
+	padding: 0;
+}
+input, textarea {
+	width: 200px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	-webkit-transition: all 0.30s ease-in-out;
+	outline: none;
+	box-shadow: 0 0 5px;
+	border: 1px solid;
+}
+input:focus, textarea:focus {
+	box-shadow: 0 0 5px #2b8ad0;
+	border: 1px solid #2b8ad0;
+}
+button {
+	width: 200px;
+	padding: 10px;
+	text-decoration: none;
+}
+header {
+	background-color: black;
+	width: 100%;
+	margin-bottom: 5px;	
+}
+
+#header_menu ul{
+	width: 100%;
+	background-color: grey;
+}
+#header_menu li {
+	display: block;
+	float: left;
+}
+
+#header_menu button {
+	color: white;
+	text-decoration: none;
+	display: block;
+	padding: 7px 15px;
+	background-color: grey;
+	border: 0;
+	font-size: 17px;
+}
+
+#header_menu button:hover {
+	background-color: blue;
+}
+</style>
+</head>
+<body ng-app="myapp" ng-controller="mycontrol" ng-init="books=[]; customers=[]; transactions=[]">
+	<header>
+		<a style="text-decoration: none; color:orange; display:inline-block;" href="index.html"><h1 style="padding:10px;">Library Operations</h1></a>
+		<div id="header_menu">
+		<ul>
+			<li><button ng-click="showBookList()">List Books</button></li>
+			<li><button ng-click="showCustomerList()">List Customers</button></li>
+			<li><button ng-click="showTransactions()">Lend or Return Book</button></li>
+		</ul>
+		</div>
+	</header>
+	<br><br>
+	
+	<div ng-show="div_booklist" ng-init="update_book=[]; delete_book=[]; inputbook=[];">
+		<table>
+			<tr>
+				<th>Book id</th>
+				<th>Book title</th>
+				<th>Book author</th>
+				<th>Book copies</th>
+			</tr>
+			<tr ng-repeat="book in books" ng-init="update_book[$index]='update book'; delete_book[$index]='delete book'; indputbook[$index]=false">
+				<td align="center"><span>{{book.id}}</span></td>
+				<td align="center"><span ng-show="!inputbook[$index]">{{book.title}}</span><input ng-attr-id="{{'title' + $index}}" type="text" ng-show="inputbook[$index]" ng-model="book.title"></td>
+				<td align="center"><span ng-show="!inputbook[$index]">{{book.author}}</span><input ng-attr-id="{{'author' + $index}}" type="text" ng-show="inputbook[$index]" ng-model="book.author"></td>
+				<td align="center"><span ng-show="!inputbook[$index]">{{book.copies}}</span><input ng-attr-id="{{'copies' + $index}}" type="number" ng-show="inputbook[$index]" ng-model="book.copies"></td>
+				<td><button ng-click="updateBook(book, $index)">{{update_book[$index]}}</button></td>
+				<td><button ng-click="deleteBook(book, $index)">{{delete_book[$index]}}</button></td>
+			</tr>
+			<tr> 
+				<td></td>
+				<td align="center"><input id="title" type="text" placeholder="enter book title" ng-model="title"></td>
+				<td align="center"><input id="author" type="text" placeholder="enter book author" ng-model="author"></td>
+				<td align="center"><input id="copies" type="number" placeholder="enter book copies" ng-model="copies"></td>
+				<td aling="center"><button ng-click="addBook()">add book</button></td>
+			</tr>
+		</table>
+	</div>
+	<div ng-show="div_customerlist" ng-init="update_customer=[]; inputcustomer=[]">
+		<table>
+			<tr>
+				<th align="center">Customer id</th>
+				<th align="center">Customer name</th>
+				<th align="center">Customer address</th>
+				<th align="center">Customer contact no.</th>
+			</tr>
+			<tr ng-repeat="customer in customers" ng-init="update_customer[$index]='update customer'; inputcustomer[$index]=false">
+				<td align="center"><span>{{customer.id}}</span></td>
+				<td align="center"><span ng-show="!inputcustomer[$index]">{{customer.name}}</span><input type="text" ng-attr-id="{{'name' + $index}}" ng-show="inputcustomer[$index]" placeholder="enter customer name" ng-model="customer.name"></td>
+				<td align="center"><span ng-show="!inputcustomer[$index]">{{customer.address}}</span><input type="text" ng-attr-id="{{'address' + $index}}" ng-show="inputcustomer[$index]" placeholder="enter customer address" ng-model="customer.address"></td>
+				<td align="center"><span ng-show="!inputcustomer[$index]">{{customer.contact}}</span><input type="number" ng-attr-id="{{'contact' + $index}}" ng-show="inputcustomer[$index]" placeholder="enter customer contact no" ng-model="customer.contact"></td>
+				<td><button ng-click="updateCustomer(customer, $index)">{{update_customer[$index]}}</button></td>
+				<td><button ng-click="deleteCustomer(customer, $index)">delete customer</button></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="text" placeholder="enter customer name" id="cust_name" ng-model="cust_name"></td>
+				<td><input type="text" placeholder="enter customer address" id="cust_address" ng-model="cust_address"></td>
+				<td><input type="number" placeholder="enter customer contact no." id="cust_contact" ng-model="cust_contact"></td>
+				<td><button ng-click="addCustomer()">add customer</button></td>
+			</tr>
+		</table>
+	</div>
+	<div ng-show="div_lend_return_book" ng-init="returninput=[]">
+		<table>
+			<tr>
+				<th align="center">Transaction Id</th>
+				<th align="center">Customer Id</th>
+				<th align="center">Book Id</th>
+				<th align="center">Issue date</th>
+				<th aling="center">Return date</th>
+			</tr>
+			<tr ng-repeat="transaction in transactions" ng-init="returninput[$index]=true">
+				<td align="center"><span>{{transaction.id}}</span></td>
+				<td align="center"><span>{{transaction.custId}}</span></td>
+				<td align="center"><span>{{transaction.bookId}}</span></td>
+				<td align="center"><span>{{transaction.issueDate | date:'yyyy-MM-dd HH:mm:ss'}}</span></td>
+				<td align="center"><span>{{transaction.returnDate | date:'yyyy-MM-dd HH:mm:ss'}}</span></td>
+				<td align="center"><button ng-if="(transaction.returnDate == null || transaction.returnDate == undefinded)" ng-click="returnBook(transaction, $index)">return book</button></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="number" id="cust_id" ng-model="cust_id" placeholder="enter customer id"></td>
+				<td><input type="number" id="book_id" ng-model="book_id" placeholder="enter book id"></td>
+				<td><button ng-click="lendBook()">lend book</button></td>
+			</tr>
+		</table>
+	</div>
+	
+	</body>
+</html>

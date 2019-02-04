@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<hibernate-mapping>
+	<class name="library_operations.Transactions" table="transactions">
+		<id name="id" column="id" type="int">
+			<generator class="assigned"></generator>		
+		</id>
+		<property name="custId" column="cust_id" type="int"></property>
+		<property name="bookId" column="book_id" type="int"></property>
+		<property name="issueDate" column="issue_date" type="text"></property>
+		<property name="returnDate" column="return_date" type="text"></property>
+	</class>
+</hibernate-mapping>

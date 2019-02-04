@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<hibernate-mapping>
+
+	<class name="library_operations.Customer" table="customers">
+	
+		<id name="id" column="id" type="int">
+			<generator class="assigned"></generator>
+		</id>
+		
+		<property name="name" column="name" type="text"></property>
+		<property name="address" column="address" type="text"></property>
+		<property name="contact" column="contact" type="long"></property>
+	</class>
+
+</hibernate-mapping>
